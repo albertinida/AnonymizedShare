@@ -1,0 +1,27 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Temp Files #
+*~
+
+# Eclipse Files #
+.classpath
+.project
+.settings/
+target/
+
+# TODO File #
+TODO
+
+# log.roo #
+log.roo
+
+# persistence context #
+src/main/resources/META-INF/persistence.xml
+
+# deploy files #
+src/main/resources/META-INF/spring/database.properties

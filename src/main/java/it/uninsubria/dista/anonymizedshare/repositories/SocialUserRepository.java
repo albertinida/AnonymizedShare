@@ -1,0 +1,8 @@
+package it.uninsubria.dista.anonymizedshare.repositories;
+
+import it.uninsubria.dista.anonymizedshare.models.SocialUser;
+import org.springframework.roo.addon.layers.repository.jpa.RooJpaRepository;
+
+@RooJpaRepository(domainType = SocialUser.class)
+public interface SocialUserRepository {
+}

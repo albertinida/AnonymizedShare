@@ -1,0 +1,13 @@
+body { background-color: rbg(225,225,225); }
+
+body div { margin: auto; }
+
+div.globalContainer { width: 1100px; margin: 20px auto; }
+
+div.header { width: 900px; height: 80px; border: 1px solid black; border-radius: 5px;}
+
+div.menu { width: 900px; background-color: yellow; margin-bottom: 15px;}
+
+div.wrapper { width: 900px; height: 500px; border-left: 1px solid red; border-right: 1px solid red; }
+
+div.footer { width: 900px; height: 50px; border-top: 1px solid black; }

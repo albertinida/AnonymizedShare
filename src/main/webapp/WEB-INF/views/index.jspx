@@ -1,0 +1,13 @@
+<jsp:root 	xmlns:spring="http://www.springframework.org/tags" 
+			xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" 
+			xmlns:jsp="http://java.sun.com/JSP/Page"
+			xmlns:c="http://java.sun.com/jsp/jstl/core"
+			version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+  
+	THIS IS INDEX
+		
+	<c:out value="${message}" />
+	
+</jsp:root>
