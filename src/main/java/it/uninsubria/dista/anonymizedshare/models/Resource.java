@@ -25,6 +25,9 @@ public class Resource {
 	private String mimeType;
 	
 	@NotNull
+	private long size;
+	
+	@NotNull
 	private Date lastModification;
 	
 	@NotNull

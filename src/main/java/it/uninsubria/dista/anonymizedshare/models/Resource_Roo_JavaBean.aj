@@ -33,6 +33,14 @@ privileged aspect Resource_Roo_JavaBean {
         this.mimeType = mimeType;
     }
     
+    public long Resource.getSize() {
+        return this.size;
+    }
+    
+    public void Resource.setSize(long size) {
+        this.size = size;
+    }
+    
     public Date Resource.getLastModification() {
         return this.lastModification;
     }
