@@ -28,6 +28,4 @@ public class SocialUser {
 	@NotNull
 	private String userSecret;
 	
-	
-	
 }
