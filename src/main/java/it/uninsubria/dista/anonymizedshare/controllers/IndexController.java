@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +22,7 @@ public class IndexController {
 	private String keyManagerAddress;
 	
 	@RequestMapping(value = "/", produces = "text/html")
-	public String index(Model uiModel) throws MalformedURLException, IOException {
+	public String index(Model uiModel) throws MalformedURLException, IOException, JSONException {
 
 		HttpURLConnection keyManagerConnection;
 		URL url = new URL(keyManagerAddress);
@@ -34,7 +36,9 @@ public class IndexController {
 		 jsonResponse += jsonLine;
 		br.close();
 		
-		uiModel.addAttribute("message", jsonResponse);
+		JSONObject response = new JSONObject(jsonResponse);
+		
+		uiModel.addAttribute("message", response.get("result"));
 		return "index";
 	}
 }
