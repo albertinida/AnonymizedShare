@@ -6,6 +6,16 @@
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
-	<div class="menu">THIS IS MENU</div>
+	<div class="menu">
+		<ul>
+			<li><a href="javascript:void(0)">test</a></li>
+			<li><a href="javascript:void(0)">test</a></li>
+			<li><a href="javascript:void(0)">test</a></li>
+			<li><a href="javascript:void(0)">test</a></li>
+			<li><a href="javascript:void(0)">test</a></li>
+		</ul>
+	</div>
+	
+
 
 </jsp:root>
