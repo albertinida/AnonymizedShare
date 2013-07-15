@@ -18,6 +18,7 @@
 			<props>
 				<prop key="facebook.appId">${facebook.appId}</prop>
 				<prop key="architecture.keymanager">${architecture.keymanager}</prop>
+				<prop key="architecture.pathfinder">${architecture.pathfinder}</prop>
 			</props>
 		</property>
 	</bean>

@@ -21,24 +21,49 @@ public class IndexController {
 	@Value("${architecture.keymanager}")
 	private String keyManagerAddress;
 	
+	@Value("${architecture.pathfinder}")
+	private String pathFinderAddress;
+	
 	@RequestMapping(value = "/", produces = "text/html")
-	public String index(Model uiModel) throws MalformedURLException, IOException, JSONException {
+	public String index(Model uiModel) { //throws MalformedURLException, IOException, JSONException {
 
-		HttpURLConnection keyManagerConnection;
-		URL url = new URL(keyManagerAddress);
-		keyManagerConnection = (HttpURLConnection) url.openConnection();
-		keyManagerConnection.setRequestMethod("POST");
+		try {
+			HttpURLConnection connection;
+			URL url = new URL(keyManagerAddress);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("POST");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String jsonResponse = "", jsonLine = "";
+			
+			while ((jsonLine = br.readLine()) != null) 
+			 jsonResponse += jsonLine;
+			br.close();
+			
+			JSONObject response = new JSONObject(jsonResponse);
+			uiModel.addAttribute("keymanager", response.get("result"));
+
+			url = new URL(pathFinderAddress);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("POST");
+			
+			br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			jsonResponse = ""; jsonLine = "";
+			
+			while ((jsonLine = br.readLine()) != null) 
+			 jsonResponse += jsonLine;
+			br.close();
+			
+			response = new JSONObject(jsonResponse);
+			uiModel.addAttribute("pathfinder", response.get("result"));
+
+			
+		} catch (Exception e) {
+			uiModel.addAttribute("keymanager", e.getClass().toString()+" exception occurred");
+			uiModel.addAttribute("pathfinder", e.getClass().toString()+" exception occurred");
+			e.printStackTrace();
+		}
 		
-		BufferedReader br = new BufferedReader(new InputStreamReader(keyManagerConnection.getInputStream()));
-		String jsonResponse = "", jsonLine = "";
-		
-		while ((jsonLine = br.readLine()) != null) 
-		 jsonResponse += jsonLine;
-		br.close();
-		
-		JSONObject response = new JSONObject(jsonResponse);
-		
-		uiModel.addAttribute("message", response.get("result"));
 		return "index";
 	}
 }

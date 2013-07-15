@@ -7,6 +7,12 @@
 	<jsp:output omit-xml-declaration="yes" />
   
   	trying to communicate with KeyManager, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" />
-	<c:out value="${message}" />
-	
+	<br/>
+	<c:out value="${keymanager}" />
+	<br/>
+	<br/>
+	trying to communicate with PathFinder, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.pathfinder')" />
+	<br/>
+	<c:out value="${pathfinder}" />
+		
 </jsp:root>
