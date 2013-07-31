@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  
+  "name": "AnonymizedShare Plugin",
+  "description": "The Chrome Browser plugin that works with AnonymizedShare app",
+  "version": "0.1",
+  
+  "permissions": [
+    "https://graph.facebook.com/me"
+  ],
+  
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}
