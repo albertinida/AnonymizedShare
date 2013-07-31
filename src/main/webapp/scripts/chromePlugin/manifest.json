@@ -4,7 +4,7 @@
   "name": "AnonymizedShare Plugin",
   "description": "The Chrome Browser plugin that works with AnonymizedShare app",
   "version": "0.1",
-  "content_security_policy": "script-src 'self' https://connect.facebook.net/; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://connect.facebook.net/en_US/; object-src 'self'",
   
   "permissions": [
     "https://graph.facebook.com/me"
