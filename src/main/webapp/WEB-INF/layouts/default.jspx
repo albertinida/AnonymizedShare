@@ -38,7 +38,7 @@
 	  		<script type="text/javascript">
 		  		window.fbAsyncInit = function() {
 		  			FB.init({
-		  		  		appId      : '${facebook.appId}',	// App ID from the app dashboard
+		  		  		appId      : '${facebookAppId}',	// App ID from the app dashboard
 		  		  		// No channel file for this app. check https://developers.facebook.com/docs/javascript/gettingstarted/#channel
 		  		  		// channelUrl : '//localhost:8888/AnonymizedShare/channel.html',	// Channel file for x-domain comms
 		  		  		status     : true,	// Check Facebook Login status
