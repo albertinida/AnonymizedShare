@@ -8,4 +8,9 @@ import org.springframework.roo.addon.layers.repository.jpa.RooJpaRepository;
 
 @RooJpaRepository(domainType = SocialUser.class)
 public interface SocialUserRepository {
+	
+	public SocialUser findByEmail(String email);
+	
+	public SocialUser findByNameAndSurnameAndBirthday(String name, String surname, Date birthday);
+	
 }
