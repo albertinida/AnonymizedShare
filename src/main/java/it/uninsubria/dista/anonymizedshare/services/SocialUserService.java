@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uninsubria.dista.anonymizedshare.exceptions.CreationParameterNotValidException;
+import it.uninsubria.dista.anonymizedshare.exceptions.LoginParameterNotValidException;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
 import it.uninsubria.dista.anonymizedshare.repositories.SocialUserRepository;
 import it.uninsubria.dista.anonymizedshare.services.interfaces.SocialUserServiceInterface;
@@ -32,6 +33,26 @@ public class SocialUserService implements SocialUserServiceInterface {
 		}
 		
 		return user;
+	}
+	
+	@Autowired
+	public SocialUser login(String email, String password) throws LoginParameterNotValidException {
+		SocialUser user = socialUserRepository.findByEmailAndPassword(email, password);
+		if(user != null)
+			return user;
+		else
+			throw new LoginParameterNotValidException();
+	}
+	
+	@Autowired
+	public boolean deleteUser(String email) {
+		// TODO Auto-generated method stub
+		SocialUser user = socialUserRepository.findByEmail(email);
+		if (user!=null) {
+			this.deleteAction(user);
+			return true;
+		}else
+			return false;
 	}
 
 	private SocialUser createAction(String name, String surname, Calendar birthday, String email) throws CreationParameterNotValidException {
@@ -57,9 +78,9 @@ public class SocialUserService implements SocialUserServiceInterface {
 		
 	}
 
-	public boolean deleteUser(String email) {
-		// TODO Auto-generated method stub
-		return false;
+	private void deleteAction(SocialUser user) {
+		socialUserRepository.delete(user);			
 	}
-
+	
+	
 }

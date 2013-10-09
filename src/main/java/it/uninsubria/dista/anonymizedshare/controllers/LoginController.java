@@ -3,23 +3,47 @@ package it.uninsubria.dista.anonymizedshare.controllers;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import it.uninsubria.dista.anonymizedshare.exceptions.LoginParameterNotValidException;
+import it.uninsubria.dista.anonymizedshare.models.SocialUser;
+import it.uninsubria.dista.anonymizedshare.services.SocialUserService;
 
 @Controller
 @RequestMapping(value = "/login")
 public class LoginController {
 
+	@Autowired
+	SocialUserService socialUserService;
 	
 	@ResponseBody
 	@RequestMapping(value ="/", produces = "text/html", method = RequestMethod.GET)
 	public String login() {
 		
-		return null;
+		return "login";
 	}
 
+	@RequestMapping(value ="/", produces ="text/html", method = RequestMethod.POST)
+	public String login(HttpServletRequest httpServletRequest,Model uiModel) {
+		String email = httpServletRequest.getParameter("email");
+		String password = httpServletRequest.getParameter("password");
+		
+		try {
+			SocialUser user = socialUserService.login(email, password);
+			uiModel.addAttribute("user", user);
+		} catch (LoginParameterNotValidException e) {
+			String error = "Utente non trovato";
+			uiModel.addAttribute("errorMsg",error);
+			e.printStackTrace();
+		}
+		return "login";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public String getAsymmetricKeys(HttpServletRequest httpServletRequest) {

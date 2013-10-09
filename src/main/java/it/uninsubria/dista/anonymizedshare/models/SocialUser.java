@@ -28,6 +28,9 @@ public class SocialUser {
     @Column(unique = true)
 	private String email;
 	
+	@NotNull
+	private String password;
+	
 	/* campo gestito da AS-Server (ex-RMS)
 	 * serve per memorizzare la chiave segreta UNIVOCA per utente
 	 * da generare pseudorandom alla creazione

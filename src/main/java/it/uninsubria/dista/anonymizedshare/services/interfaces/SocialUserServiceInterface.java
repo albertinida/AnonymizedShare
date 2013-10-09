@@ -1,6 +1,7 @@
 package it.uninsubria.dista.anonymizedshare.services.interfaces;
 
 import it.uninsubria.dista.anonymizedshare.exceptions.CreationParameterNotValidException;
+import it.uninsubria.dista.anonymizedshare.exceptions.LoginParameterNotValidException;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
 
 import java.util.Calendar;
@@ -10,5 +11,7 @@ public interface SocialUserServiceInterface {
 
 	public SocialUser create(String name, String surname, Calendar birthday, String email) throws CreationParameterNotValidException;
 
+	public SocialUser login(String email,String password) throws LoginParameterNotValidException;
+	
 	public boolean deleteUser(String email);
 }

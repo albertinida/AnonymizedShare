@@ -36,28 +36,27 @@ public class CreateController {
 		String email = httpServletRequest.getParameter("email");
 		
 		// TODO: gestire correttamente il passaggio di dati della data di nascita
-		// Long day = Long.parseLong(httpServletRequest.getParameter("day"));
-		// Long month = Long.parseLong(httpServletRequest.getParameter("month"));
-		// Long year = Long.parseLong(httpServletRequest.getParameter("year"));
+		Integer day = Integer.parseInt(httpServletRequest.getParameter("day"));  //Long.parseLong(...)
+		Integer month = Integer.parseInt(httpServletRequest.getParameter("month")); 
+		Integer year = Integer.parseInt(httpServletRequest.getParameter("year"));  
 		Calendar birthday = Calendar.getInstance();
-
+		birthday.clear();
+		birthday.set(year, month, day);
 		// TODO: controllare che qui i campi siano diversi da null --per non fare chiamate inutili al service
 		
 		try {
-			SocialUser user = socialUserService.create(name, surname, birthday, email);
-
-			uiModel.addAttribute("user", user);
-
-		
+			if(name!=null && surname!=null && email!=null && birthday!=null) {
+				SocialUser user = socialUserService.create(name, surname, birthday, email);
+				uiModel.addAttribute("user", user);
+				}
 		} catch (CreationParameterNotValidException e) {
 			// TODO: gestire le eccezioni (e.g. stampare messaggio di errore)
-			
 			String errore = "Non posso creare l'utente";
 			uiModel.addAttribute("errorMsg", errore);
 			e.printStackTrace();
 		}
 		
-		
+				
 		return "create";
 	}
 	
