@@ -10,6 +10,8 @@ public interface ResourcesRepository {
 	
 	public Resource findByName(String name);
 	
+	public Resource findById(int id);
+	
 	public Resource findByNameAndUserOwner(String name,SocialUser userOwner);
 	
 	public void delete(Resource resource);

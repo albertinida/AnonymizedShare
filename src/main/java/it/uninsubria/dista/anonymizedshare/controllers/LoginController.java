@@ -80,7 +80,7 @@ public class LoginController {
 		 */
 		//estraggo i parametri dalla richiesta in ingresso
 		int id = Integer.parseInt(httpServletRequest.getParameter("id"));       
-		int random = Integer.parseInt(httpServletRequest.getParameter("random"));  
+		int random = Integer.parseInt(httpServletRequest.getParameter("seed"));  
 		String message = httpServletRequest.getParameter("message"); 	// message = "Register || new_key";
 		URL url;
 	    HttpURLConnection connection;  
@@ -88,7 +88,7 @@ public class LoginController {
 	    
 		try { //oggetto json
 			jsonObject.put("id", id);  //id 
-			jsonObject.put("random", random); //valore random
+			jsonObject.put("seed", random); //valore random
 			jsonObject.put("message", message); //messaggio
 			int length = (jsonObject.toString()).getBytes().length; //lunghezza in byte del messaggio da inviare
 			//parametri per la richiesta
@@ -119,8 +119,8 @@ public class LoginController {
 		     * costruisce l'oggetto JSON a partire dalla stringa ricevuta
 		     */
 		    JSONObject jsonResponse = new JSONObject(response.toString());
-		    if(jsonResponse.getInt("random")-jsonObject.getInt("random")==1)
-		    	if(jsonResponse.getInt("random")==random + 1){
+		    if(jsonResponse.getInt("seed")-jsonObject.getInt("seed")==1)
+		    	if(jsonResponse.getInt("seed")==random + 1){
 		    		/*
 				     * controlla che il valore pseudo-random ricevuto sia uguale
 				     * all'incremento del primo
@@ -153,7 +153,7 @@ public class LoginController {
 		int r = ((int)Math.random())*10;
 		jsonObject = new JSONObject();
 		jsonObject.put("id", id);	
-		jsonObject.put("random",r);
+		jsonObject.put("seed",r);
 		jsonObject.put("message","R2R");
 		length = jsonObject.toString().length();
 		//invia la richiesta per ottenere le chiavi asimmetriche;
@@ -167,9 +167,9 @@ public class LoginController {
 		}
 		jsonResponse = new JSONObject(response.toString());
 		if(jsonResponse.getInt("id") == id){
-			if(jsonResponse.getInt("random")==random-r) 
+			if(jsonResponse.getInt("seed")==random-r) 
 				jsonObject = new JSONObject();
-				jsonObject.put("random",jsonResponse.getInt("random")+1);
+				jsonObject.put("seed",jsonResponse.getInt("seed")+1);
 				jsonObject.put("message", "THANKS");
 				outputStream.writeBytes(jsonObject.toString());
 				outputStream.flush();

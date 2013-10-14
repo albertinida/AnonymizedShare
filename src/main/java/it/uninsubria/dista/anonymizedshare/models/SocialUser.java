@@ -1,5 +1,6 @@
 package it.uninsubria.dista.anonymizedshare.models;
 
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,6 +15,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity
 public class SocialUser {
+	
+	@NotNull
+	private BigInteger userId;
 	
 	@NotNull
 	private String name;

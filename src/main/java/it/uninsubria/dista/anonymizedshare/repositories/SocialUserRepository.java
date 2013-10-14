@@ -15,6 +15,8 @@ public interface SocialUserRepository {
 	
 	public SocialUser findByNameAndSurnameAndBirthday(String name, String surname, Date birthday);
 	
+	
+	
 	public void delete(SocialUser socialUser);
 	
 }
