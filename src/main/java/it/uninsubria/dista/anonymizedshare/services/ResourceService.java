@@ -10,3 +10,4 @@ import it.uninsubria.dista.anonymizedshare.services.interfaces.ResourceServiceIn
 public class ResourceService implements ResourceServiceInterface {
 
 }
+
