@@ -30,4 +30,11 @@
   	</c:otherwise>
   </c:choose>
   
+  
+  <c:if test="${not empty sessionId}">
+  		<script type="text/javascript">
+  			document.cookie="sessionId="+${sessionId};
+  		</script>
+  </c:if>
+  
 </jsp:root>

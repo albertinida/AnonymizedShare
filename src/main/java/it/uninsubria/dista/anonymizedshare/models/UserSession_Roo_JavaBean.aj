@@ -8,12 +8,12 @@ import it.uninsubria.dista.anonymizedshare.models.UserSession;
 
 privileged aspect UserSession_Roo_JavaBean {
     
-    public SocialUser UserSession.getUser() {
-        return this.user;
+    public SocialUser UserSession.getSocialUser() {
+        return this.socialUser;
     }
     
-    public void UserSession.setUser(SocialUser user) {
-        this.user = user;
+    public void UserSession.setSocialUser(SocialUser socialUser) {
+        this.socialUser = socialUser;
     }
     
     public String UserSession.getSessionId() {

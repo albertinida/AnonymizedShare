@@ -13,7 +13,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class UserSession {
 	
 	@OneToOne
-	private SocialUser user;
+	private SocialUser socialUser;
 	
 	@Column(unique = true)
 	private String sessionId;

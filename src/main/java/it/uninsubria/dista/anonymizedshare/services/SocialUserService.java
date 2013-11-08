@@ -77,13 +77,20 @@ public class SocialUserService {
 		SocialUser storedUser = socialUserRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
 		if (storedUser != null) {
 			
-			UserSession newSession = new UserSession();
-			newSession.setUser(storedUser);
-			newSession.setSessionId(new BigInteger(64, new SecureRandom()).toString(16));
+			UserSession storedSession = userSessionRepository.findBySocialUser(storedUser);
+			if (storedSession == null) {
 			
-			userSessionRepository.saveAndFlush(newSession);
-			
-			return storedUser;
+				UserSession newSession = new UserSession();
+				newSession.setSocialUser(storedUser);
+				newSession.setSessionId(new BigInteger(64, new SecureRandom()).toString(16));
+				
+				userSessionRepository.saveAndFlush(newSession);
+				
+				return storedUser;
+			} else {
+				
+				return storedSession.getSocialUser();
+			}
 		} else {
 			throw new LoginNotValidException();
 		}
