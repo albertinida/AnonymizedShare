@@ -12,11 +12,5 @@ public interface SocialUserRepository {
 	public SocialUser findByEmail(String email);
 	
 	public SocialUser findByEmailAndPassword(String email,String password);
-	
-	public SocialUser findByNameAndSurnameAndBirthday(String name, String surname, Date birthday);
-	
-	
-	
-	public void delete(SocialUser socialUser);
-	
+		
 }

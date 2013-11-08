@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import it.uninsubria.dista.anonymizedshare.exceptions.LoginNotValidException;
 import it.uninsubria.dista.anonymizedshare.exceptions.LoginParameterNotValidException;
+import it.uninsubria.dista.anonymizedshare.exceptions.NullParameterException;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
 import it.uninsubria.dista.anonymizedshare.services.SocialUserService;
 
@@ -41,17 +43,35 @@ public class LoginController {
 
 	@RequestMapping(value ="/", produces ="text/html", method = RequestMethod.POST)
 	public String login(HttpServletRequest httpServletRequest,Model uiModel) {
+		
 		String email = httpServletRequest.getParameter("email");
 		String password = httpServletRequest.getParameter("password");
 		
 		try {
-			SocialUser user = socialUserService.login(email, password);
-			uiModel.addAttribute("user", user);
-		} catch (LoginParameterNotValidException e) {
-			String error = "Utente non trovato";
-			uiModel.addAttribute("errorMsg",error);
-			e.printStackTrace();
+			
+			if (email!=null && password!=null) {
+				SocialUser tempUser = new SocialUser();
+				tempUser.setEmail(email);
+				tempUser.setPassword(password);
+				
+				SocialUser user = socialUserService.login(tempUser);
+				uiModel.addAttribute("user", user);
+
+			} else {
+				throw new NullParameterException();
+			}
+		
+			
+		} catch (LoginNotValidException lnve) {
+			String errore = "Utente non trovato";
+			uiModel.addAttribute("errorMsg", errore);
+			lnve.printStackTrace();
+		} catch (NullParameterException npe) {
+			String errore = "Non posso fare login. Mancano parametri necessari";
+			uiModel.addAttribute("errorMsg", errore);
+			npe.printStackTrace();
 		}
+		
 		return "login";
 	}
 	

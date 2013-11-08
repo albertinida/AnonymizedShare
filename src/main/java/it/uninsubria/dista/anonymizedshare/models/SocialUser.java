@@ -17,16 +17,14 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class SocialUser {
 	
 	@NotNull
-	private BigInteger userId;
+	@Column(unique = true)
+	private BigInteger uid;
 	
 	@NotNull
 	private String name;
 	
 	@NotNull
 	private String surname;
-	
-	@NotNull
-	private Calendar birthday;
 	
 	@NotNull
     @Column(unique = true)
@@ -41,6 +39,6 @@ public class SocialUser {
 	 */
 	@NotNull
     @Column(unique = true)
-	private String userSecret;
+	private String secret;
 	
 }
