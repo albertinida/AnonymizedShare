@@ -13,6 +13,10 @@
     <put-attribute name="body" value="/WEB-INF/views/create.jspx" />
   </definition>
 
+  <definition name="login" extends="default">
+    <put-attribute name="body" value="/WEB-INF/views/login.jspx" />
+  </definition>
+
   <definition name="dataAccessFailure" extends="default">
     <put-attribute name="body" value="/WEB-INF/views/dataAccessFailure.jspx" />
   </definition>

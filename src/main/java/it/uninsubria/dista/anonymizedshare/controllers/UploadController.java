@@ -2,11 +2,14 @@ package it.uninsubria.dista.anonymizedshare.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Set;
 @Controller
 @RequestMapping(value = "/upload")
 public class UploadController {
@@ -27,9 +30,15 @@ public class UploadController {
 		 * 
 		 * mandare al browser i due secret
 		 *
-		 *
-		 *
 		 */
+		//token è una stringa in formato json??
+		
+		try {
+			JSONObject json = new JSONObject(token);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
@@ -64,6 +73,6 @@ public class UploadController {
 
 		// produce pagina html per l'upload
 		
-		return null;
+		return "upload";
 	}
 }

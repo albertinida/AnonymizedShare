@@ -22,7 +22,9 @@ public class DownloadController {
 		 *e dell'utente che vuole accedere , il valore random per il file
 		 * e id proprietario, id file e un secondo valore random cifrati con 
 		 * la chiave pubblica del key manager 
-			
+			*/
+		return null;
+	}
 	@RequestMapping(value = "/", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public String downloadResource(HttpServletRequest httpservletRequest) {
 		

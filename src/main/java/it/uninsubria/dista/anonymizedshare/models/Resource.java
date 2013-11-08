@@ -35,4 +35,5 @@ public class Resource {
 	@NotNull
 //TODO: inject property	@Max("${pathfinder.maxdepth}")
 	private int sharingDepth;
+	
 }
