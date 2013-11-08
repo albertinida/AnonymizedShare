@@ -31,14 +31,6 @@ public class UploadController {
 		 * mandare al browser i due secret
 		 *
 		 */
-		//token è una stringa in formato json??
-		
-		try {
-			JSONObject json = new JSONObject(token);
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 		return null;
 	}
 	

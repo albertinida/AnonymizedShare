@@ -17,6 +17,7 @@ import it.uninsubria.dista.anonymizedshare.services.interfaces.SocialUserService
 
 @Service
 @Transactional
+
 public class SocialUserService implements SocialUserServiceInterface {
 
 	@Autowired
@@ -35,7 +36,6 @@ public class SocialUserService implements SocialUserServiceInterface {
 		return user;
 	}
 	
-	@Autowired
 	public SocialUser login(String email, String password) throws LoginParameterNotValidException {
 		SocialUser user = socialUserRepository.findByEmailAndPassword(email, password);
 		if(user != null)
@@ -44,7 +44,6 @@ public class SocialUserService implements SocialUserServiceInterface {
 			throw new LoginParameterNotValidException();
 	}
 	
-	@Autowired
 	public boolean deleteUser(String email) {
 		// TODO Auto-generated method stub
 		SocialUser user = socialUserRepository.findByEmail(email);

@@ -4,9 +4,18 @@
 package it.uninsubria.dista.anonymizedshare.models;
 
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
+import java.math.BigInteger;
 import java.util.Calendar;
 
 privileged aspect SocialUser_Roo_JavaBean {
+    
+    public BigInteger SocialUser.getUserId() {
+        return this.userId;
+    }
+    
+    public void SocialUser.setUserId(BigInteger userId) {
+        this.userId = userId;
+    }
     
     public String SocialUser.getName() {
         return this.name;
@@ -38,6 +47,14 @@ privileged aspect SocialUser_Roo_JavaBean {
     
     public void SocialUser.setEmail(String email) {
         this.email = email;
+    }
+    
+    public String SocialUser.getPassword() {
+        return this.password;
+    }
+    
+    public void SocialUser.setPassword(String password) {
+        this.password = password;
     }
     
     public String SocialUser.getUserSecret() {
