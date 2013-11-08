@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONException;
@@ -21,9 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import it.uninsubria.dista.anonymizedshare.exceptions.LoginNotValidException;
 import it.uninsubria.dista.anonymizedshare.exceptions.LoginParameterNotValidException;
+import it.uninsubria.dista.anonymizedshare.exceptions.NullParameterException;
+import it.uninsubria.dista.anonymizedshare.exceptions.NullSessionException;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
 import it.uninsubria.dista.anonymizedshare.services.SocialUserService;
+import it.uninsubria.dista.anonymizedshare.services.UserSessionService;
 
 @Controller
 @RequestMapping(value = "/login")
@@ -32,26 +37,71 @@ public class LoginController {
 	@Autowired
 	SocialUserService socialUserService;
 	
+	@Autowired
+	UserSessionService userSessionService;
+	
 	@ResponseBody
 	@RequestMapping(value ="/", produces = "text/html", method = RequestMethod.GET)
-	public String login() {
+	public String loginGet(HttpServletRequest httpServletRequest, Model uiModel) {
+		
+		// TODO: da controllare e gestire con i cookies.
+		Cookie[] cookies = httpServletRequest.getCookies();
+		if (cookies!=null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("activeSessionId")) {
+					
+					try {
+						SocialUser user = userSessionService.fetchUser(cookie.getValue());
+						uiModel.addAttribute("user", user);
+
+					} catch (NullSessionException nse) {
+						nse.printStackTrace();
+					}
+					
+				}
+			}
+		}
+		
 		
 		return "login";
 	}
 
 	@RequestMapping(value ="/", produces ="text/html", method = RequestMethod.POST)
-	public String login(HttpServletRequest httpServletRequest,Model uiModel) {
+	public String loginPost(HttpServletRequest httpServletRequest,Model uiModel) {
+		
 		String email = httpServletRequest.getParameter("email");
 		String password = httpServletRequest.getParameter("password");
 		
 		try {
-			SocialUser user = socialUserService.login(email, password);
-			uiModel.addAttribute("user", user);
-		} catch (LoginParameterNotValidException e) {
-			String error = "Utente non trovato";
-			uiModel.addAttribute("errorMsg",error);
-			e.printStackTrace();
+			
+			if (email!=null && password!=null) {
+				SocialUser tempUser = new SocialUser();
+				tempUser.setEmail(email);
+				tempUser.setPassword(password);
+				
+				SocialUser user = socialUserService.login(tempUser);
+				uiModel.addAttribute("sessionId", userSessionService.fetchSession(user).getSessionId());
+				uiModel.addAttribute("user", user);
+
+			} else {
+				throw new NullParameterException();
+			}
+		
+			
+		} catch (LoginNotValidException lnve) {
+			String errore = "Utente non trovato";
+			uiModel.addAttribute("errorMsg", errore);
+			lnve.printStackTrace();
+		} catch (NullParameterException npe) {
+			String errore = "Non posso fare login. Mancano parametri necessari";
+			uiModel.addAttribute("errorMsg", errore);
+			npe.printStackTrace();
+		} catch (NullSessionException nse) {
+			String errore = "Non posso fare login. Ci sono stati errori nel creare la sessione";
+			uiModel.addAttribute("errorMsg", errore);
+			nse.printStackTrace();
 		}
+		
 		return "login";
 	}
 	

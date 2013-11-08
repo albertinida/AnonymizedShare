@@ -1,6 +1,9 @@
 package it.uninsubria.dista.anonymizedshare.controllers;
 
 import it.uninsubria.dista.anonymizedshare.exceptions.CreationParameterNotValidException;
+import it.uninsubria.dista.anonymizedshare.exceptions.LoginNotValidException;
+import it.uninsubria.dista.anonymizedshare.exceptions.NullCreationException;
+import it.uninsubria.dista.anonymizedshare.exceptions.NullParameterException;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
 import it.uninsubria.dista.anonymizedshare.services.SocialUserService;
 
@@ -34,31 +37,34 @@ public class CreateController {
 		String name = httpServletRequest.getParameter("name");
 		String surname = httpServletRequest.getParameter("surname");
 		String email = httpServletRequest.getParameter("email");
-		
-		// TODO: gestire correttamente il passaggio di dati della data di nascita
-		Integer day = Integer.parseInt(httpServletRequest.getParameter("day"));  //Long.parseLong(...)
-		Integer month = Integer.parseInt(httpServletRequest.getParameter("month")); 
-		Integer year = Integer.parseInt(httpServletRequest.getParameter("year"));  
-		Calendar birthday = Calendar.getInstance();
-		birthday.clear();
-		birthday.set(year, month, day);
-		// TODO: controllare che qui i campi siano diversi da null --per non fare chiamate inutili al service
+		String password = httpServletRequest.getParameter("password");
 		
 		try {
-			if(name!=null && surname!=null && email!=null && birthday!=null) {
-				SocialUser user = socialUserService.create(name, surname, birthday, email);
+			if(name!=null && surname!=null && email!=null && password!=null) {
+				SocialUser tempUser = new SocialUser();
+				tempUser.setName(name);
+				tempUser.setSurname(surname);
+				tempUser.setEmail(email);
+				tempUser.setPassword(password);
+				SocialUser user = socialUserService.create(tempUser);
 				uiModel.addAttribute("user", user);
-				}
-		} catch (CreationParameterNotValidException e) {
-			// TODO: gestire le eccezioni (e.g. stampare messaggio di errore)
-			String errore = "Non posso creare l'utente";
+			} else {
+				throw new NullParameterException();
+			}
+		} catch (NullParameterException npe) {
+			String errore = "Non posso creare l'utente. Mancanano parametri necessari";
 			uiModel.addAttribute("errorMsg", errore);
-			e.printStackTrace();
-		}
+			npe.printStackTrace();
+		} catch (NullCreationException nce) {
+			String errore = "C'è stato un errore durante la creazione dell'utente";
+			uiModel.addAttribute("errorMsg", errore);
+			nce.printStackTrace();
+		} catch (LoginNotValidException lnve) {
+			String errore = "Esiste già un utente con questa email registrata";
+			uiModel.addAttribute("errorMsg", errore);
+			lnve.printStackTrace();
+		} 
 		
-				
 		return "create";
 	}
-	
-	
 }

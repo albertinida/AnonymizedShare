@@ -6,9 +6,9 @@
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
   
-  PAGINA DI CREAZIONE DI UN UTENTE <br/>
+  PAGINA DI LOGIN DI UN UTENTE <br/>
   
-  <div>conterrà una form con action in POST sullo stesso path (/create) che crea effettivamente l'utente.
+  <div>conterrà una form con action in POST sullo stesso path (/login) che logga l'utente attuale.
   se l'utente già esiste allora fa login.</div>
   
   <font style="color:red; font-weight: bold;"> <c:out value="${errorMsg}" /> </font>
@@ -22,14 +22,19 @@
 	<c:otherwise>  	
 		
 		<form action="" method="POST">
-			<p>name: <input type="text" name="name"/></p>
-		  	<p>surname: <input type="text" name="surname"/></p>
 		  	<p>email: <input type="text" name="email"/></p>
 		  	<p>password: <input type="password" name="password"/></p>
-		  	<input type="submit" value="create user" />
+		  	<input type="submit" value="login user" />
 		</form>
   
   	</c:otherwise>
   </c:choose>
+  
+  
+  <c:if test="${not empty sessionId}">
+  		<script type="text/javascript">
+  			document.cookie="sessionId="+${sessionId};
+  		</script>
+  </c:if>
   
 </jsp:root>

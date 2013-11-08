@@ -8,11 +8,10 @@ import it.uninsubria.dista.anonymizedshare.exceptions.CreationParameterNotValidE
 import it.uninsubria.dista.anonymizedshare.models.Resource;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
 import it.uninsubria.dista.anonymizedshare.repositories.ResourcesRepository;
-import it.uninsubria.dista.anonymizedshare.services.interfaces.ResourceServiceInterface;
 
 @Service
 @Transactional
-public class ResourceService implements ResourceServiceInterface {
+public class ResourceService {
 
 	@Autowired
 	ResourcesRepository resourcesRepository;

@@ -7,12 +7,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -98,4 +102,32 @@ public class BroadcastController {
 		// chiamata ai log di sistema per tracciare una chiamata non valida.
 		return null;
 	}
+	
+	/*
+	@ResponseBody
+	@RequestMapping(value = "/test", produces = "text/html")
+	public String testRSAKeys(Model uiModel) throws NoSuchAlgorithmException {
+		
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(512);
+        KeyPair keyPair = keyGen.generateKeyPair();
+        byte[] publicKey = keyPair.getPublic().getEncoded();
+        StringBuffer retString = new StringBuffer();
+        for (int i = 0; i < publicKey.length; ++i) {
+            retString.append(Integer.toHexString(0x0100 + (publicKey[i] & 0x00FF)).substring(1));
+        }
+        
+        String keytest = "\npublic="+retString.toString();
+
+        byte[] privateKey = keyPair.getPrivate().getEncoded();
+        retString = new StringBuffer();
+        for (int i = 0; i < privateKey.length; ++i) {
+            retString.append(Integer.toHexString(0x0100 + (privateKey[i] & 0x00FF)).substring(1));
+        }
+        
+        keytest += "\nprivate="+retString.toString();
+
+        
+		return keytest;
+	}*/
 }
