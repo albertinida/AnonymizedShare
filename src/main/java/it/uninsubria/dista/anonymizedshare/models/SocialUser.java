@@ -7,6 +7,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -40,5 +42,5 @@ public class SocialUser {
 	@NotNull
     @Column(unique = true)
 	private String secret;
-	
+			
 }

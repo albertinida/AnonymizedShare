@@ -21,12 +21,8 @@ import it.uninsubria.dista.anonymizedshare.repositories.UserSessionRepository;
 
 @Service
 @Transactional
-<<<<<<< HEAD
 
-public class SocialUserService implements SocialUserServiceInterface {
-=======
-public class SocialUserService {
->>>>>>> ddf56acfebfa1e1521c1a1d8846342a53056eb68
+public class SocialUserService  {
 
 	@Autowired
 	SocialUserRepository socialUserRepository;
@@ -50,7 +46,6 @@ public class SocialUserService {
 		}
 		return user;
 	}
-
 	
 	private SocialUser createAction(SocialUser user) throws NullParameterException {
 
@@ -73,16 +68,8 @@ public class SocialUserService {
 			throw new NullParameterException();
 		}
 	}
-
 	
-<<<<<<< HEAD
-	public SocialUser login(String email, String password) throws LoginParameterNotValidException {
-		SocialUser user = socialUserRepository.findByEmailAndPassword(email, password);
-		if(user != null)
-			return user;
-		else
-			throw new LoginParameterNotValidException();
-=======
+
 	public SocialUser login(SocialUser user) throws LoginNotValidException, NullParameterException {
 		
 		if (user == null) throw new NullParameterException();
@@ -107,11 +94,8 @@ public class SocialUserService {
 		} else {
 			throw new LoginNotValidException();
 		}
->>>>>>> ddf56acfebfa1e1521c1a1d8846342a53056eb68
 	}
 
-
-	
 	public boolean deleteUser(String email) {
 		// TODO Auto-generated method stub
 		SocialUser user = socialUserRepository.findByEmail(email);
