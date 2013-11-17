@@ -48,7 +48,7 @@ public class UploadController {
 		 * chiamata del tipo UploadRequest ur = uploadService.getUploadRequestByToken(token)
 		 * 
 		 * invia al key manager il file cifrato con i vari parametri (mimeType, meta dati,...)
-		 * presi dall'oggetto ur
+		 * presi dall'oggetto 
 		 * 
 		 * aspetta la risposta
 		 * 

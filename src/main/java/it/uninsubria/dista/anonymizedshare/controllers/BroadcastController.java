@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 @Controller
 @RequestMapping(value = "/broadcast")
 public class BroadcastController {
@@ -67,7 +68,7 @@ public class BroadcastController {
 			json.put("seed",seed);	//valore random
 			json.put("message", message);	//messaggio che indica al KM la richiesta di key-broadcast
 			//costruisce la richiesta http - url , POST , content-type e content-length
-			URL url = new URL("http://...");
+			URL url = new URL("http://localhost:8888/KeyManager/");
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Length", Integer.toString(json.toString().getBytes().length));
