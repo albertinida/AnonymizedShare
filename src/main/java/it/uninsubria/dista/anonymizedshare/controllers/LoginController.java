@@ -236,7 +236,7 @@ public class LoginController {
 			byte[] bytes = cipher.doFinal(cipherText);
 			//viene costruito l'oggetto json sulla stringa decifrata per estrarre i parametri
 			JSONObject json = new JSONObject(new String(bytes));
-			if(json.getString("message").equals("SESSION_KEY")) {
+			if(json.getString("message").equals("diffie-hellman_sessionKey")) {
 				//estrae la parte di messaggio cifrata con la chiave pubblica di KM e la inserisce in un nuovo oggetto json per poterla inviare
 				cipherText = (byte[]) json.get("cipherMessage");
 				json = new JSONObject();
