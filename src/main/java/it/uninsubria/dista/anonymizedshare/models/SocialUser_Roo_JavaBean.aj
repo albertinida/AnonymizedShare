@@ -40,6 +40,22 @@ privileged aspect SocialUser_Roo_JavaBean {
         this.email = email;
     }
     
+    public String SocialUser.getModulus() {
+        return this.modulus;
+    }
+    
+    public void SocialUser.setModulus(String modulus) {
+        this.modulus = modulus;
+    }
+    
+    public String SocialUser.getExponent() {
+        return this.exponent;
+    }
+    
+    public void SocialUser.setExponent(String exponent) {
+        this.exponent = exponent;
+    }
+    
     public String SocialUser.getPassword() {
         return this.password;
     }

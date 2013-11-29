@@ -1,7 +1,9 @@
 package it.uninsubria.dista.anonymizedshare.models;
 
+import java.math.BigInteger;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity
 public class Resource {
+	
+	@NotNull
+	@Column(unique = true)
+	private long resourceId;
 	
 	@NotNull
 	@ManyToOne

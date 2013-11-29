@@ -30,6 +30,11 @@ public class SocialUserService  {
 	@Autowired
 	UserSessionRepository userSessionRepository;
 	
+	public SocialUser getById(BigInteger userId) {
+		SocialUser user = socialUserRepository.findByUid(userId);
+		return user;
+	}
+	
 	public SocialUser create(SocialUser user) throws NullParameterException, NullCreationException, LoginNotValidException {
 		
 		if (user == null) throw new NullCreationException();

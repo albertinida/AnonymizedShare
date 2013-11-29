@@ -33,6 +33,12 @@ public class SocialUser {
 	private String email;
 	
 	@NotNull
+	private String modulus;
+	
+	@NotNull
+	private String exponent;
+	
+	@NotNull
 	private String password;
 	
 	/* campo gestito da AS-Server (ex-RMS)

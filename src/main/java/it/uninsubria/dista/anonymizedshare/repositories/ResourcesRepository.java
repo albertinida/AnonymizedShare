@@ -1,5 +1,8 @@
 package it.uninsubria.dista.anonymizedshare.repositories;
 
+import java.math.BigInteger;
+import java.util.Set;
+
 import it.uninsubria.dista.anonymizedshare.models.Resource;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
 
@@ -10,9 +13,11 @@ public interface ResourcesRepository {
 	
 	public Resource findByName(String name);
 	
-	public Resource findById(int id);
+	public Resource findById(long id);
 	
 	public Resource findByNameAndUserOwner(String name,SocialUser userOwner);
+	
+	public Set<Resource> findByUserOwner(SocialUser userOwner);
 	
 	public void delete(Resource resource);
 }

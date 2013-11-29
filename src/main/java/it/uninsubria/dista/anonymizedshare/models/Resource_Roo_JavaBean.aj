@@ -9,6 +9,14 @@ import java.util.Date;
 
 privileged aspect Resource_Roo_JavaBean {
     
+    public long Resource.getResourceId() {
+        return this.resourceId;
+    }
+    
+    public void Resource.setResourceId(long resourceId) {
+        this.resourceId = resourceId;
+    }
+    
     public SocialUser Resource.getUserOwner() {
         return this.userOwner;
     }

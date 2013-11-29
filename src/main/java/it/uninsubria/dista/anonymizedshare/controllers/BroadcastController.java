@@ -32,11 +32,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/broadcast")
 public class BroadcastController {
 	
-	@Value("${crypto.key.public}")
-	private String pubKey;
+	@Value("${crypto.modulus}")
+	private String modulus;
 	
-	@Value("${crypto.km.key}")
-	private String keyManagerKey;
+	@Value("${crypto.exponent.public")
+	private String publicExponent;
+	
+	@Value("${keymanager.modulus}")
+	private String keyManagerModulus;
+	
+	@Value("${keymanager.exponent}")
+	private String keyManagerExponent;
 	
 	@ResponseBody
 	@RequestMapping(value = "/", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
@@ -88,12 +94,15 @@ public class BroadcastController {
 		    
 		    	if(seed - json.getInt("seed") == 1)		//confronta i parametri restituiti dal KM con quelli precedentemente inviati
 		    		if(json.getInt("seed") == seed+1) {
-		    			keyManagerKey = json.getString("KM-key");	//estrae la chiave pubblica del KM 
+		    			keyManagerModulus = json.getString("mod");	//riceve modulo e esponente della chiave pubblica KM
+		    			keyManagerExponent = json.getString("exp");
 		    			json = new JSONObject();		//crea una nuova stringa json da inviare al browser
 		    			json.put("seed++", seed+1);		//valore random intero incrementato di 1
-		    			json.put("AS-Key", pubKey);	//chiave pubblica 
+		    			json.put("ASmod", modulus);	//parametri della chiave pubblica 
+		    			json.put("ASexp", publicExponent);	
 		    			json.put("seed--",seed-1);		//valore random intero decrementato di 1
-		    			json.put("KM-Key",keyManagerKey);	//chiave pubblica del keymanager
+		    			json.put("KMmod",keyManagerModulus);	//parametri della chiave pubblica del keymanager
+		    			json.put("KMexp", keyManagerExponent);
 		    			return json.toString();
 		    	}
 		    
