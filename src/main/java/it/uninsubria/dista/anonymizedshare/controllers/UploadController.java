@@ -1,11 +1,13 @@
 package it.uninsubria.dista.anonymizedshare.controllers;
 
 import it.uninsubria.dista.anonymizedshare.exceptions.CreationParameterNotValidException;
+import it.uninsubria.dista.anonymizedshare.exceptions.NullParameterException;
 import it.uninsubria.dista.anonymizedshare.models.Resource;
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
+import it.uninsubria.dista.anonymizedshare.models.UploadRequest;
 import it.uninsubria.dista.anonymizedshare.services.ResourceService;
 import it.uninsubria.dista.anonymizedshare.services.SocialUserService;
-
+import it.uninsubria.dista.anonymizedshare.services.UploadRequestService;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -38,6 +40,7 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.Date;
 import java.util.Set;
 @Controller
 @RequestMapping(value = "/upload")
@@ -63,9 +66,12 @@ public class UploadController {
 	
 	@Autowired
 	private SocialUserService socialUserService;
+	
+	@Autowired 
+	private UploadRequestService uploadService;
 
 	@RequestMapping(value = "/{token}", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public String uploadResource(@PathVariable("token") String token, HttpServletRequest httpServletRequest,Model uiModel) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, JSONException, IOException, ClassNotFoundException, CreationParameterNotValidException {
+	public String uploadResource(@PathVariable("token") String token, HttpServletRequest httpServletRequest,Model uiModel) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, JSONException, IOException, ClassNotFoundException, CreationParameterNotValidException, NullParameterException {
 		
 		/*
 		 * 
@@ -81,40 +87,38 @@ public class UploadController {
 		 * mandare al browser i due secret
 		 *
 		 */
-		//estrae i metadati del file
-		String fileName = httpServletRequest.getParameter("fileName");
-		//procedimento per estrarre il mimetype dal file: divide il nome del file usando '.' come separatore, e l'ultima parte è il formato
-		String[] str = fileName.split("\\.");
-		String mimeType = str[str.length-1];
+		
+		//metadati della richiesta di upload
+		String uploadRequestId = token;
+		String resourceName = httpServletRequest.getParameter("fileName");
 		long size = Long.parseLong(httpServletRequest.getParameter("size"));
-		long resourceId = Long.parseLong(token);
-		byte[] cipherText = httpServletRequest.getParameter("request").getBytes();
-		//costruisce la chiave privata per fare la prima decifratura
-		RSAPrivateKeySpec privateKeySpec = new RSAPrivateKeySpec(new BigInteger(modulus),new BigInteger(privateExponent)); 
+		//estrae il mimeType dal nome del file
+		String[] temp = resourceName.split("\\.");
+		String mimeType = temp[temp.length-1];
+		
+		//richiesta cifrata
+		byte[]  cipherText = httpServletRequest.getParameter("cipherText").getBytes();
+		
 		KeyFactory factory = KeyFactory.getInstance("RSA");
-		PrivateKey privateKey = factory.generatePrivate(privateKeySpec);
+		PrivateKey privateKey = factory.generatePrivate(new RSAPrivateKeySpec(new BigInteger(modulus),new BigInteger(privateExponent)));
 		Cipher cipher = Cipher.getInstance("RSA");
-		//esegue la decifratura
-		cipher.init(Cipher.DECRYPT_MODE, privateKey);
+		cipher.init(Cipher.DECRYPT_MODE,privateKey);
+		//decifratura della richiesta
 		byte[] plainText = cipher.doFinal(cipherText);
-		//costruisce l'oggetto Json in cui è contenuta una parte cifrata
-		JSONObject json = new JSONObject(new String(plainText));
-		BigInteger userId = new BigInteger(json.getString("IDu"));
-		//verrà utilizzato per i controlli successivi
-		int r = json.getInt("number");
-		//ricava la chiave pubblica dell'utente usando modulo ed esponente
+		JSONObject json = new JSONObject(new String(cipherText));
+		BigInteger userId = new BigInteger(json.getString("userId"));
+		long resourceId = json.getLong("fileId");
+		int number = json.getInt("number");
+		
 		SocialUser user = socialUserService.getById(userId);
-		BigInteger userModulus = new BigInteger(user.getModulus());
-		BigInteger userExponent = new BigInteger(user.getExponent());
-		RSAPublicKeySpec userPublicKeySpec = new RSAPublicKeySpec(userModulus,userExponent);
-		factory = KeyFactory.getInstance("RSA");
-		PublicKey userPublicKey = factory.generatePublic(userPublicKeySpec);
-		//effettua il controllo sul file che sta per essere caricato, per assicurarsi che non esista già
+		//controlla che non esistano file con lo stesso id già associati all'utente 
 		if(resourceService.exists(resourceId, userId)) {
 			JSONObject error = new JSONObject();
 			//genera il messaggio di errore in formato json
 			error.put("message", "id file bad");
-			//cifra il messaggio d'errore da restituire con la chiave pubblica dell'utente			
+			//cifra il messaggio d'errore da restituire con la chiave pubblica dell'utente
+			factory = KeyFactory.getInstance("RSA");
+			PublicKey userPublicKey = factory.generatePublic(new RSAPublicKeySpec(new BigInteger(user.getModulus()), new BigInteger(user.getExponent())));
 			cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.ENCRYPT_MODE,userPublicKey);
 			//cifra il messaggio e lo invia in forma di strina al browser
@@ -123,43 +127,60 @@ public class UploadController {
 			return new String(cipherText);
 			}
 		else {
+			Resource resource = new Resource();
+			resource.setId(resourceId);
+			resource.setUserOwner(user);
+			resource.setName(resourceName);
+			resource.setMimeType(mimeType);
+			resource.setSize(size);
+			resourceService.create(resource);
 			
-			Resource resource = resourceService.create(user, fileName, mimeType, size);
-			//estrae il messaggio indirizzato a KeyManager, che è una stringa json cifrata con la chiave pubblica di KeyManager
-			byte[] cipherMessage = (byte[])json.get("cipherMessage");
-			URL url = new URL("http://localhost:8888/KeyManager/");
+			UploadRequest uploadRequest = new UploadRequest();
+			uploadRequest.setId(new BigInteger(token));
+			uploadRequest.setNumber(number);
+			uploadRequest.setSocialUser(user);
+			uploadService.createNewUploadRequest(uploadRequest);
+			
+			//viene estratto il sotto-messaggi cifrato da indirizzare a KeyManager
+			byte[] messageToKeyManager = (byte[])json.get("cipherMessage");
+			URL url = new URL("http://localhost:8888/KeyManager/"); 
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type", "text");		
 			connection.setUseCaches (false);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
-			connection.setRequestProperty("Content-Length", Integer.toString(cipherMessage.length));
+			connection.setRequestProperty("Content-Length", Integer.toString(messageToKeyManager.length));
+			
 			ObjectOutputStream outputStream = new ObjectOutputStream(connection.getOutputStream());
-			outputStream.writeObject(cipherMessage);
+			outputStream.write(messageToKeyManager);
 			outputStream.flush();
-		
+			
 			ObjectInputStream inputStream = new ObjectInputStream(connection.getInputStream());
-			byte[] response = (byte[])inputStream.readObject();
-			r = r+1;
-			String secret = socialUserService.getById(userId).getSecret();
+			byte[] response = (byte[]) inputStream.readObject();
 			json = new JSONObject();
-			json.put("number", r);
-			json.put("userSecret", secret);
+			json.put("number", number+1);
+			json.put("secret", user.getSecret());
 			json.put("cipherMessage", response);
+			
+			RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(new BigInteger(user.getModulus()), new BigInteger(user.getExponent()));
+			factory = KeyFactory.getInstance("RSA");
+			PublicKey userPublicKey = factory.generatePublic(publicKeySpec);
+			cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.ENCRYPT_MODE,userPublicKey);
 			response = cipher.doFinal(json.toString().getBytes());
+			
 			uiModel.addAttribute("response", response);
-			return "{\"result\" : \"success\" }";
+			return "{\"request\" : \"sent\" }";
 		}
 	}
 	
 	@RequestMapping(value = "/", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public String uploadResource(HttpServletRequest httpServletRequest) {
+	public String uploadResource(HttpServletRequest httpServletRequest) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, JSONException, NullParameterException, CreationParameterNotValidException, IOException {
 		
 		
 		String token = httpServletRequest.getParameter("token");
-		String file = httpServletRequest.getParameter("file");
+		
 		
 		/*
 		 * -- il file qui è già cifrato
@@ -178,8 +199,45 @@ public class UploadController {
 		 * 
 		 */
 		
-	
-		return null;
+		
+		
+		UploadRequest uploadRequest = uploadService.getUploadRequest(token);
+		
+		byte[] request = httpServletRequest.getParameter("request").getBytes();
+		KeyFactory factory = KeyFactory.getInstance("RSA");
+		PrivateKey privateKey = factory.generatePrivate(new RSAPrivateKeySpec(new BigInteger(modulus), new BigInteger(privateExponent)));
+		Cipher cipher = Cipher.getInstance("RSA");
+		cipher.init(Cipher.DECRYPT_MODE,privateKey);
+		byte[] plainText = cipher.doFinal(request);
+		JSONObject json = new JSONObject(new String(plainText));
+		BigInteger userId = new BigInteger(json.getString("userId"));
+		long resourceId = json.getLong("fileId");
+		int number = json.getInt("number");
+		int sharingDepth = json.getInt("depth");
+		
+		if(userId.equals(uploadRequest.getSocialUser().getUid())) 
+			if(number - uploadRequest.getNumber() == 2) {
+				SocialUser user = socialUserService.getById(userId);
+				Resource resource = resourceService.getResource(resourceId);
+				resourceService.setSharingDepth(resource, sharingDepth);
+				resourceService.setModificationDate(resource, new Date());
+			}
+		
+		byte[] messageToKeyManager = (byte[]) json.get("cipherMessage");
+		URL url = new URL("http://localhost:8888/KeyManager/"); 
+		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+		connection.setRequestMethod("POST");
+		connection.setRequestProperty("Content-Type", "text");		
+		connection.setUseCaches (false);
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
+		connection.setRequestProperty("Content-Length", Integer.toString(messageToKeyManager.length));
+		
+		ObjectOutputStream outputStream = new ObjectOutputStream(connection.getOutputStream());
+		outputStream.write(messageToKeyManager);
+		outputStream.flush();
+		
+		return "{\"result\" : \"upload ok\"}";
 	}
 	
 	@RequestMapping(value = "/", produces = "text/html", method = RequestMethod.GET)

@@ -1,14 +1,11 @@
 package it.uninsubria.dista.anonymizedshare.models;
 
 import java.math.BigInteger;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -16,27 +13,17 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-public class Resource {
+public class UploadRequest {
+
+	@NotNull
+	@Column(unique = true)
+	private BigInteger id;
 	
+	@NotNull
+	private int number;
 	
 	@NotNull
 	@ManyToOne
-	private SocialUser userOwner;
-	
-	@NotNull
-	private String name;
-	
-	@NotNull
-	private String mimeType;
-	
-	@NotNull
-	private long size;
-	
-	@NotNull
-	private Date lastModification;
-	
-	@NotNull
-//TODO: inject property	@Max("${pathfinder.maxdepth}")
-	private int sharingDepth;
+	SocialUser socialUser;
 	
 }

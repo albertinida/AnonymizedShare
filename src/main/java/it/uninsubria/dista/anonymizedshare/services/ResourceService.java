@@ -32,23 +32,31 @@ public class ResourceService {
 			return true;
 	}
 	
+	public Resource getResource(long id) {
+		Resource resource = resourcesRepository.findById(id);
+		return resource;
+	}
+	
 	public void setModificationDate(Resource resource, Date date) {
 		Resource temp = resourcesRepository.findById(resource.getId());
 		temp.setLastModification(new Date());
 		resourcesRepository.saveAndFlush(temp);
 	}
 	
-	public Resource create(SocialUser userOwner, String name, String mimeType,
-			long size) throws CreationParameterNotValidException {
+	public void setSharingDepth(Resource resource, int sharingDepth) {
+		Resource temp = resourcesRepository.findById(resource.getId());
+		temp.setSharingDepth(sharingDepth);
+		resourcesRepository.saveAndFlush(temp);
+	}
+	
+	public Resource create(Resource resource) throws CreationParameterNotValidException {
 		
-		Resource resource = resourcesRepository.findByNameAndUserOwner(name, userOwner);
+		Resource storedResource = resourcesRepository.findById(resource.getId());
 		
-		if(resource == null) {
+		if(storedResource == null)			
+			storedResource = this.createAction(resource);
 			
-			resource = this.createAction(userOwner, name, mimeType, size);
-			
-		}
-		return resource;
+		return storedResource;
 	}
 
 	
@@ -61,16 +69,16 @@ public class ResourceService {
 			return false;
 	}
 	
-	private Resource createAction(SocialUser userOwner,String name,String mimeType,long size) throws CreationParameterNotValidException {
-		if(userOwner != null && name != null && mimeType != null && size >= 0) {
-			Resource resource = new Resource();
-			resource.setUserOwner(userOwner);
-			resource.setName(name);
-			resource.setMimeType(mimeType);
-			resource.setSize(size);
-			resource.setSharingDepth(3);
-			resourcesRepository.saveAndFlush(resource);
-			return resource;
+	private Resource createAction(Resource resource) throws CreationParameterNotValidException {
+		if(resource.getUserOwner() != null && resource.getName() != null && resource.getMimeType() != null && resource.getSize() >= 0) {
+			Resource newResource = new Resource();
+			newResource.setId(resource.getId());
+			newResource.setUserOwner(resource.getUserOwner());
+			newResource.setName(resource.getName());
+			newResource.setMimeType(resource.getMimeType());
+			newResource.setSize(resource.getSize());
+			resourcesRepository.saveAndFlush(newResource);
+			return newResource;
 		}else
 			throw new CreationParameterNotValidException();		
 	}
