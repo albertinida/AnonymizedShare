@@ -54,6 +54,9 @@
 									previousHtml = $('body .wrapper').html();
 									$('body .wrapper').html( previousHtml + '<p>Welcome to AnonymizedShare, '+data.name+' !</p>'); 
 								});
+								FB.api('/me/friends',{fields: 'name, id'}, function(data){
+									console.log(data);
+								});
 							} else {
 								$('body .wrapper').text('Error in communicating with Facebook. Lack of Authorization');
 							}
