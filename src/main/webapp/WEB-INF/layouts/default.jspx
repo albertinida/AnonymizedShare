@@ -51,7 +51,8 @@
 							if (response.authResponse) {
 								console.log('fetching user information...');
 								FB.api('/me', function(data){
-									$('body .wrapper').text($('body .wrapper).text() + 'Welcome to AnonymizedShare, '+data.name+' !'); 
+									previousHtml = $('body .wrapper').html();
+									$('body .wrapper').html( previousHtml + '<p>Welcome to AnonymizedShare, '+data.name+' !</p>'); 
 								});
 							} else {
 								$('body .wrapper').text('Error in communicating with Facebook. Lack of Authorization');
