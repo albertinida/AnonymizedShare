@@ -5,10 +5,9 @@
 			version="2.0">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
-  
-  	<script type="text/javascript">
-		msg = "trying to communicate with KeyManager, hosted at:" +  <spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" />
-	</script>
+
+	<!--  
+	trying to communicate with KeyManager, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" />
 	<br/>
 	<c:out value="${keymanager}" />
 	<br/>
@@ -16,5 +15,6 @@
 	trying to communicate with PathFinder, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.pathfinder')" />
 	<br/>
 	<c:out value="${pathfinder}" />
-		
+	-->
+	
 </jsp:root>
