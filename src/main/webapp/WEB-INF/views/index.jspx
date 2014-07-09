@@ -7,27 +7,16 @@
 	<jsp:output omit-xml-declaration="yes" />
 
         <spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" var="KMS_URL" />
-        <c:set var="PMS-host"><spring:eval expression="@applicationProperties.getProperty('architecture.pathfinder')" /></c:set>
-
+        <spring:eval expression="@applicationProperties.getProperty('architecture.pathfinder')" var="PFS_URL" />
 
 	<script type="text/javascript">
 
-		console.log('<c:out value="${KMS_URL}" />');
+		console.log('Ping KMS, hosted at: <c:out value="${KMS_URL}" /> ...');
+                console.log('KMS says: 	<c:out value="${keymanager}" /> ');
+                console.log('Ping PFS, hosted at: <c:out value="${PFS_URL}" />');
+                console.log('PFS says: 	<c:out value="${pathfinder}" /> ');
 
 	</script>
-
-
-  
-	trying to communicate with KeyManager, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" />
-	<br/>
-	<c:out value="${KMS_URL}" />
-	<br/>
-	<c:out value="${keymanager}" />
-	<br/>
-	<br/>
-	trying to communicate with PathFinder, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.pathfinder')" />
-	<br/>
-	<c:out value="${pathfinder}" />
 
 	
 </jsp:root>
