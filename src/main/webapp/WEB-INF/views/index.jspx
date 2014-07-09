@@ -12,7 +12,7 @@
 
 	<script type="text/javascript">
 
-		console.log('<:out value="${KMS-host}" />');
+		console.log('<c:out value="${KMS-host}" />');
 
 	</script>
 
