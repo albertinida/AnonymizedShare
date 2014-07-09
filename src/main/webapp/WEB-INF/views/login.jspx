@@ -1,0 +1,40 @@
+<jsp:root 	xmlns:spring="http://www.springframework.org/tags" 
+			xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" 
+			xmlns:jsp="http://java.sun.com/JSP/Page"
+			xmlns:c="http://java.sun.com/jsp/jstl/core"
+			version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+  
+  PAGINA DI LOGIN DI UN UTENTE <br/>
+  
+  <div>conterrà una form con action in POST sullo stesso path (/login) che logga l'utente attuale.
+  se l'utente già esiste allora fa login.</div>
+  
+  <font style="color:red; font-weight: bold;"> <c:out value="${errorMsg}" /> </font>
+  
+  <c:choose>
+	<c:when test="${not empty user}">
+		
+		<p> buongiorno <c:out value="${user.getName()} ${user.getSurname()}"/> </p>
+	
+	</c:when>
+	<c:otherwise>  	
+		
+		<form action="" method="POST">
+		  	<p>email: <input type="text" name="email"/></p>
+		  	<p>password: <input type="password" name="password"/></p>
+		  	<input type="submit" value="login user" />
+		</form>
+  
+  	</c:otherwise>
+  </c:choose>
+  
+  
+  <c:if test="${not empty sessionId}">
+  		<script type="text/javascript">
+  			document.cookie="sessionId="+${sessionId};
+  		</script>
+  </c:if>
+  
+</jsp:root>

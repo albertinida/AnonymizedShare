@@ -4,16 +4,16 @@
 package it.uninsubria.dista.anonymizedshare.models;
 
 import it.uninsubria.dista.anonymizedshare.models.SocialUser;
-import java.util.Date;
+import java.math.BigInteger;
 
 privileged aspect SocialUser_Roo_JavaBean {
     
-    public String SocialUser.getSocialId() {
-        return this.socialId;
+    public BigInteger SocialUser.getUid() {
+        return this.uid;
     }
     
-    public void SocialUser.setSocialId(String socialId) {
-        this.socialId = socialId;
+    public void SocialUser.setUid(BigInteger uid) {
+        this.uid = uid;
     }
     
     public String SocialUser.getName() {
@@ -32,20 +32,44 @@ privileged aspect SocialUser_Roo_JavaBean {
         this.surname = surname;
     }
     
-    public Date SocialUser.getBirthday() {
-        return this.birthday;
+    public String SocialUser.getEmail() {
+        return this.email;
     }
     
-    public void SocialUser.setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void SocialUser.setEmail(String email) {
+        this.email = email;
     }
     
-    public String SocialUser.getUserSecret() {
-        return this.userSecret;
+    public String SocialUser.getModulus() {
+        return this.modulus;
     }
     
-    public void SocialUser.setUserSecret(String userSecret) {
-        this.userSecret = userSecret;
+    public void SocialUser.setModulus(String modulus) {
+        this.modulus = modulus;
+    }
+    
+    public String SocialUser.getExponent() {
+        return this.exponent;
+    }
+    
+    public void SocialUser.setExponent(String exponent) {
+        this.exponent = exponent;
+    }
+    
+    public String SocialUser.getPassword() {
+        return this.password;
+    }
+    
+    public void SocialUser.setPassword(String password) {
+        this.password = password;
+    }
+    
+    public String SocialUser.getSecret() {
+        return this.secret;
+    }
+    
+    public void SocialUser.setSecret(String secret) {
+        this.secret = secret;
     }
     
 }
