@@ -11,10 +11,8 @@
 
 	<script type="text/javascript">
 
-		console.log('Ping KMS, hosted at: <c:out value="${KMS_URL}" /> ...');
-                console.log('KMS says: 	<c:out value="${keymanager}" /> ');
-                console.log('Ping PFS, hosted at: <c:out value="${PFS_URL}" />');
-                console.log('PFS says: 	<c:out value="${pathfinder}" /> ');
+		console.log('Ping KMS, hosted at: <c:out value="${KMS_URL}" /> ... KMS says: <c:out value="${keymanager}" /> ');
+                console.log('Ping PFS, hosted at: <c:out value="${PFS_URL}" /> ... PFS says: <c:out value="${pathfinder}" /> ');
 
 	</script>
 
