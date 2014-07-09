@@ -6,6 +6,17 @@
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
+        <c:set var="KMS-host"><spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" /></c:set>
+        <c:set var="PMS-host"><spring:eval expression="@applicationProperties.getProperty('architecture.pathfinder')" /></c:set>
+
+
+	<script type="text/javascript">
+
+		console.log('<:out value="${KMS-host}" />');
+
+	</script>
+
+
 	<!--  
 	trying to communicate with KeyManager, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" />
 	<br/>
