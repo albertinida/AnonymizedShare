@@ -20,6 +20,8 @@
   
 	trying to communicate with KeyManager, hosted at: <spring:eval expression="@applicationProperties.getProperty('architecture.keymanager')" />
 	<br/>
+	<c:out value="${KMS-host}" />
+	<br/>
 	<c:out value="${keymanager}" />
 	<br/>
 	<br/>
