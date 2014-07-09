@@ -8,11 +8,11 @@
 
 	<div class="menu">
 		<ul>
-			<li><a href="javascript:void(0)">test</a></li>
-			<li><a href="javascript:void(0)">test</a></li>
-			<li><a href="javascript:void(0)">test</a></li>
-			<li><a href="javascript:void(0)">test</a></li>
-			<li><a href="javascript:void(0)">test</a></li>
+			<li><a href="javascript:void(0)">Home</a></li>
+			<li><a href="javascript:void(0)">Your Friends</a></li>
+			<li><a href="javascript:void(0)">Your Files</a></li>
+			<li><a href="javascript:void(0)">Info</a></li>
+			<li><a href="javascript:void(0)">Help</a></li>
 		</ul>
 	</div>
 	
