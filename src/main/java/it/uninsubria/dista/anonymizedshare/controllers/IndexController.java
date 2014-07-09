@@ -24,8 +24,8 @@ public class IndexController {
 	@Value("${architecture.pathfinder}")
 	private String pathFinderAddress;
 	
-	@Value("${crypto.key.public}")
-	private String ASPublicKey;
+//	@Value("${crypto.key.public}")
+//	private String ASPublicKey;
 	
 	
 	@RequestMapping(value = "/", produces = "text/html")
@@ -61,7 +61,7 @@ public class IndexController {
 			response = new JSONObject(jsonResponse);
 			uiModel.addAttribute("pathfinder", response.get("result"));
 
-			uiModel.addAttribute("AS-publicKey", ASPublicKey);
+//			uiModel.addAttribute("AS-publicKey", ASPublicKey);
 			
 		} catch (Exception e) {
 			uiModel.addAttribute("keymanager", e.getClass().toString()+" exception occurred");
